@@ -1,0 +1,5 @@
+h2o-wave
+numpy
+pandas
+transformers
+huggingface_hub

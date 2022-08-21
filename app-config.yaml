@@ -1,0 +1,7 @@
+bloom_versions:
+  - bigscience/bloom
+  - bigscience/bloom-350m
+  - bigscience/bloom-760m
+  - bigscience/bloom-1b3
+  - bigscience/bloom-2b5
+  - bigscience/bloom-6b3
