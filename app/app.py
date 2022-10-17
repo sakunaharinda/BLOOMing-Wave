@@ -109,7 +109,7 @@ async def main_view(q: Q):
         ui.separator(),
         ui.buttons(justify='center', items=[
             ui.button(name='generate', label='Generate', primary=True),
-            ui.button(name='about', label='About')
+            # ui.button(name='about', label='About')
         ])
     ])
 
