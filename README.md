@@ -103,8 +103,6 @@ Step-By-Step guide can also be found [here](https://wave.h2o.ai/docs/installatio
 2. Then visit [localhost:10101](http://localhost:10101/bloom)
 3. Enjoy playing with BLOOM !!
 
-4. Sample test data to test the application
-   - GET : https://run.mocky.io/v3/27c4d516-4d91-4414-91e9-7978e26e8d05
 
 ## Upcoming Features <a name = "features"></a>
 
