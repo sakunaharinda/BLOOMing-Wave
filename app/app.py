@@ -2,12 +2,11 @@ from h2o_wave import Q, ui, main, app, handle_on, on
 from lib.config import Config
 from lib.validator import validate_inputs
 from tasks.email_assist import get_email
+from tasks.text_gen import get_gen
 
 tabs = [
     ui.tab(name='#email', label='E-Mail Assistant', icon='Mail'),
-    ui.tab(name='#chatbot', label='Chat Bot', icon='Robot'),
-    ui.tab(name='#summarizer', label='Text Summarization', icon='KnowledgeArticle'),
-    ui.tab(name='#sentiment', label='Sentiment Analysis', icon='Emoji'),
+    # ui.tab(name='#summarizer', label='Text Summarization', icon='KnowledgeArticle'),
     ui.tab(name='#text_gen', label='Text Generation', icon='EditNote')
 ]
 
@@ -149,16 +148,18 @@ def content_body(q: Q):
     tab = q.client.tab
     if tab == 'email':
         return email_body(q)
-    elif tab == 'chatbot':
-        return chat_bot_body()
-    elif tab == 'summarizer':
-        return summarizer_body()
-    elif tab == 'sentiment':
-        return sentiment_body()
+    # elif tab == 'chatbot':
+    #     return chat_bot_body()
+    # elif tab == 'summarizer':
+    #     return summarizer_body()
+    # elif tab == 'sentiment':
+    #     return sentiment_body()
     elif tab == 'text_gen':
         return [
-            ui.textbox('prompt', label="Prompt", placeholder="Enter the prompt here", multiline=True, spellcheck=True),
-            ui.textbox('generated_text', label='Generated Text', multiline=True, height='500px')
+            ui.textbox('prompt', value=q.args.prompt, label="Prompt",
+                       placeholder="Enter the prompt here", multiline=True,
+                       spellcheck=True),
+            ui.textbox('generated_text', label='Generated Text', value=q.args.generated_text, multiline=True, height='500px')
         ]
     else:
         return email_body(q)
@@ -173,28 +174,28 @@ def email_body(q: Q):
     ]
 
 
-def chat_bot_body():
-    return [
-        ui.textbox('chatbot_q', label="Question", placeholder="Enter a question you want to ask", multiline=True,
-                   spellcheck=True),
-        ui.textbox('chatbot_conv', label='Continued Conversation', multiline=True, height='500px')
-    ]
-
-
-def summarizer_body():
-    return [
-        ui.textbox('paragraph', label="Paragraph", placeholder="Enter a paragraph to summarize", multiline=True,
-                   spellcheck=True, height='310px'),
-        ui.textbox('summary', label='Summary', multiline=True, height='250px')
-    ]
-
-
-def sentiment_body():
-    return [
-        ui.textbox('statement', label="Statement", placeholder="Enter a statement here", multiline=True,
-                   spellcheck=True),
-        ui.textbox('sentiment', label='Sentiment', multiline=True, height='500px')
-    ]
+# def chat_bot_body():
+#     return [
+#         ui.textbox('chatbot_q', label="Question", placeholder="Enter a question you want to ask", multiline=True,
+#                    spellcheck=True),
+#         ui.textbox('chatbot_conv', label='Continued Conversation', multiline=True, height='500px')
+#     ]
+#
+#
+# def summarizer_body():
+#     return [
+#         ui.textbox('paragraph', label="Paragraph", placeholder="Enter a paragraph to summarize", multiline=True,
+#                    spellcheck=True, height='310px'),
+#         ui.textbox('summary', label='Summary', multiline=True, height='250px')
+#     ]
+#
+#
+# def sentiment_body():
+#     return [
+#         ui.textbox('statement', label="Statement", placeholder="Enter a statement here", multiline=True,
+#                    spellcheck=True),
+#         ui.textbox('sentiment', label='Sentiment', multiline=True, height='500px')
+#     ]
 
 
 def show_error(q: Q, error: str):
@@ -215,3 +216,9 @@ async def generate(q: Q):
             show_error(q, error)
         else:
             q.args.email_body = resp
+    elif task == 'text_gen':
+        resp, error = get_gen(q.args.prompt, model, token, params)
+        if error is not None:
+            show_error(q, error)
+        else:
+            q.args.generated_text = resp

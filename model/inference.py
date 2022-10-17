@@ -16,6 +16,8 @@ def infer(prompt: str, model: str, token: str, params: dict):
         logging.info(response)
         return response[0]['generated_text'], None
     elif 'error' in response:
+        print("\n\n")
+        print(response['error'])
         logging.error(response['error'])
         return None, response['error']
     else:
